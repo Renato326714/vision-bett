@@ -1,4 +1,4 @@
-const API_KEY = "e3d3bc19c2f3faed2a5bb95f26b04da1;
+const API_KEY = "300843a9bfecf9babf1af862ec5626b2"
 
 async function buscarJogosHoje() {
   const hoje = new Date().toISOString().split("T")[0];
