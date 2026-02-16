@@ -1,31 +1,56 @@
-const jogosHoje = [
-  { casa: "Flamengo", fora: "Palmeiras" },
-  { casa: "Real Madrid", fora: "Barcelona" },
-  { casa: "Manchester City", fora: "Liverpool" }
-];
+const API_KEY = "e3d3bc19c2f3faed2a5bb95f26b04da1;
 
-async function analisarJogo(timeA, timeB) {
-  return `Probabilidade:
-${timeA}: 48%
-${timeB}: 52%
+async function buscarJogosHoje() {
+  const hoje = new Date().toISOString().split("T")[0];
 
-Placar provável: 1x2
+  const resposta = await fetch(
+    `https://api-football-v1.p.rapidapi.com/v3/fixtures?date=${hoje}`,
+    {
+      method: "GET",
+      headers: {
+        "X-RapidAPI-Key": API_KEY,
+        "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com"
+      }
+    }
+  );
+
+  const dados = await resposta.json();
+  return dados.response.slice(0, 10);
+}
+
+function gerarAnalise(jogo) {
+  const casa = jogo.teams.home.name;
+  const fora = jogo.teams.away.name;
+
+  const probCasa = Math.floor(Math.random() * 40) + 40;
+  const probFora = 100 - probCasa;
+
+  return `
+Probabilidade:
+${casa}: ${probCasa}%
+${fora}: ${probFora}%
+
+Sugestão: Mais de 1.5 gols
 Risco: Médio
-Melhor aposta: Mais de 1.5 gols`;
+`;
 }
 
 async function gerarAnalises() {
   const container = document.getElementById("analises");
+  container.innerHTML = "Carregando jogos de hoje...";
+
+  const jogos = await buscarJogosHoje();
+
   let html = "";
 
-  for (const jogo of jogosHoje) {
-    const resultado = await analisarJogo(jogo.casa, jogo.fora);
+  jogos.forEach(jogo => {
     html += `
       <div class="card">
-        <h3>${jogo.casa} vs ${jogo.fora}</h3>
-        <pre>${resultado}</pre>
-      </div>`;
-  }
+        <h3>${jogo.teams.home.name} vs ${jogo.teams.away.name}</h3>
+        <pre>${gerarAnalise(jogo)}</pre>
+      </div>
+    `;
+  });
 
   container.innerHTML = html;
 }
