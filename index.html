@@ -3,156 +3,61 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vision Bet Premium - Análise Profissional</title>
+<title>Vision Bet Premium</title>
 <meta name="theme-color" content="#00ff88">
 <link rel="manifest" href="manifest.json">
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Roboto',sans-serif;}
-body{background:#0f1b16;color:white;}
-header{
-  background:#00ff88;
-  color:#0f1b16;
-  padding:18px;
-  text-align:center;
-  font-weight:bold;
-  font-size:22px;
-  box-shadow:0 2px 6px rgba(0,0,0,0.5);
-  position:sticky;
-  top:0;
-  z-index:10;
-  transition: background 0.3s;
-}
-.container{padding:20px;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial, sans-serif}
+body{background:#0f1b16;color:white}
+header{background:#00ff88;color:#0f1b16;padding:16px;text-align:center;font-weight:bold;font-size:20px}
+.container{padding:16px}
 .card{
-  background:linear-gradient(145deg,#16241e,#0f1b16);
-  padding:20px;
-  border-radius:15px;
-  margin-bottom:20px;
-  box-shadow:0 6px 20px rgba(0,255,136,0.4);
-  transition: transform 0.3s, box-shadow 0.3s;
-  position: relative;
-  border:1px solid rgba(0,255,136,0.3);
-  backdrop-filter: blur(10px);
+  background:linear-gradient(145deg,#12221b,#0b1511);
+  border-radius:16px;
+  padding:16px;
+  margin-bottom:14px;
+  border:1px solid rgba(0,255,136,.25);
+  box-shadow:0 6px 20px rgba(0,255,136,0.2);
 }
-.card:hover{
-  transform: translateY(-7px);
-  box-shadow:0 12px 25px rgba(0,255,136,0.7);
-}
-.card h3{color:#00ff88;margin-bottom:10px;font-size:18px;}
-.card p{margin-bottom:6px;line-height:1.4;font-size:14px;}
-.tag{font-size:12px;color:#22ff99;margin-bottom:6px;font-weight:bold;}
-.stat{background:#0f1b16;border-left:4px solid #00ff88;padding:6px 10px;margin:4px 0;font-size:13px;}
-button{
-  background:#00ff88;color:#0f1b16;border:none;padding:12px;border-radius:10px;width:100%;
-  font-weight:bold;font-size:14px;cursor:pointer;transition: background 0.2s;
-}
-button:hover{background:#22ff99;}
+.card h3{color:#00ff88;margin-bottom:6px}
+pre{white-space:pre-wrap;color:#00ff88;font-size:14px}
 .menu{
-  position:fixed;bottom:0;width:100%;background:#16241e;display:flex;justify-content:space-around;
-  padding:12px 0;box-shadow:0 -2px 6px rgba(0,0,0,0.5);
+  position:fixed;
+  bottom:0;
+  width:100%;
+  background:#16241e;
+  display:flex;
+  justify-content:space-around;
+  padding:12px 0;
 }
-.menu button{width:auto;background:none;color:#00ff88;font-weight:bold;font-size:16px;}
-.dropdown{position:relative;display:inline-block;}
-.dropdown-content{
-  display:none;position:absolute;background:#16241e;min-width:160px;box-shadow:0 8px 16px rgba(0,0,0,0.5);
-  border-radius:8px;z-index:1;
-}
-.dropdown-content button{width:100%;padding:10px;text-align:left;}
-.dropdown:hover .dropdown-content{display:block;}
-.chart{width:100%;height:80px;display:flex;justify-content:space-between;align-items:flex-end;margin-top:10px;}
-.bar{width:12%;background:#00ff88;border-radius:4px;transition: height 0.5s;}
-.fab{
-  position:fixed;right:20px;bottom:80px;width:60px;height:60px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;font-size:24px;
+.menu button{
+  background:none;
+  color:#00ff88;
+  border:none;
+  font-size:16px;
 }
 </style>
 </head>
+
 <body>
-<header>Vision Bet Premium - Análise Avançada</header>
+<header>Vision Bet Premium</header>
 
-<div class="container" id="content"></div>
-
-<button class="fab">💬</button>
+<div class="container">
+  <h2>Análises IA do Dia</h2>
+  <div id="analises">Carregando análises...</div>
+</div>
 
 <div class="menu">
-<button onclick="mostrarInicio()">🏠 Início</button>
-<div class="dropdown">
-<button>🌍 Ligas</button>
-<div class="dropdown-content">
-  <button onclick="mostrarBrasileirao()">🇧🇷 Brasileirão</button>
-  <button onclick="mostrarLaLiga()">🇪🇸 La Liga</button>
-  <button onclick="mostrarPremier()">🇬🇧 Premier League</button>
-  <button onclick="mostrarAFC()">🏆 AFC Champions</button>
+<button onclick="location.reload()">Atualizar</button>
 </div>
-</div>
-<button onclick="mostrarFavoritos()">⭐ Favoritos</button>
-</div>
+
+<script src="ai-auto.js"></script>
 
 <script>
-const jogosIA = {
-  inicio: [
-    {jogo:"Flamengo x Palmeiras", lig:"🔥 Odd do Dia", cenario:"Flamengo pressionando, média de finalizações alta.", sugestao:"Mais de 1.5 gols", odd:1.65, escanteio:5, cartao:2, gols:1, tendencia:[30,50,70,40,60,50,80]},
-    {jogo:"Corinthians x São Paulo", lig:"🔥 Odd do Dia", cenario:"Clássico aberto, média alta de gols.", sugestao:"Mais de 2.5 gols", odd:2.10, escanteio:6, cartao:3, gols:2, tendencia:[50,40,60,30,70,40,60]}
-  ],
-  brasileirao: [
-    {jogo:"Flamengo x Palmeiras", lig:"🇧🇷 Brasileirão", cenario:"Flamengo forte, média alta de gols.", sugestao:"Ambas marcam", odd:1.85, escanteio:5, cartao:2, gols:2, tendencia:[60,50,70,40,60,50,70]},
-    {jogo:"Corinthians x Santos", lig:"🇧🇷 Brasileirão", cenario:"Clássico equilibrado.", sugestao:"Mais de 1.5 gols", odd:1.95, escanteio:7, cartao:3, gols:1, tendencia:[50,60,40,50,60,50,40]}
-  ],
-  laliga:[
-    {jogo:"Barcelona x Real Madrid", lig:"🇪🇸 La Liga", cenario:"Jogo histórico, média alta de gols.", sugestao:"Ambas marcam", odd:1.90, escanteio:8, cartao:3, gols:2, tendencia:[70,60,80,50,70,60,80]},
-    {jogo:"Atletico x Sevilla", lig:"🇪🇸 La Liga", cenario:"Atlético domina em casa.", sugestao:"Atlético vence", odd:1.75, escanteio:5, cartao:2, gols:1, tendencia:[60,50,70,40,50,60,70]}
-  ],
-  premier:[
-    {jogo:"Arsenal x Chelsea", lig:"🇬🇧 Premier League", cenario:"Arsenal forte em casa.", sugestao:"Arsenal vence", odd:1.75, escanteio:6, cartao:2, gols:2, tendencia:[60,50,70,40,60,50,70]},
-    {jogo:"Liverpool x City", lig:"🇬🇧 Premier League", cenario:"Jogos abertos, média alta de gols.", sugestao:"Mais de 2.5 gols", odd:1.90, escanteio:7, cartao:3, gols:3, tendencia:[50,60,40,50,60,50,40]}
-  ],
-  afc:[
-    {jogo:"Al Hilal x Persepolis", lig:"🏆 AFC Champions", cenario:"Al Hilal dominante.", sugestao:"Al Hilal vence", odd:1.70, escanteio:6, cartao:2, gols:2, tendencia:[60,50,70,40,60,50,70]}
-  ]
-};
-
-function gerarCards(lista){
-  const container = document.getElementById("content");
-  container.innerHTML = "";
-  lista.forEach(j=>{
-    let barras = j.tendencia.map(()=> `<div class="bar" style="height:0px"></div>`).join("");
-    container.innerHTML += `
-      <div class="card">
-        <div class="tag">${j.lig}</div>
-        <h3>${j.jogo}</h3>
-        <p><strong>Cenário:</strong> ${j.cenario}</p>
-        <p><strong>Sugestão IA:</strong> ${j.sugestao}</p>
-        <p><strong>Odd média:</strong> ${j.odd}</p>
-        <div class="stat">Escanteios: ${j.escanteio} | Cartões: ${j.cartao} | Gols esperados: ${j.gols}</div>
-        <div class="chart">${barras}</div>
-        <button onclick="verDetalhe('${j.jogo}')">Ver análise detalhada</button>
-      </div>`;
-  });
-  setTimeout(()=> {
-    const charts = document.querySelectorAll('.card .chart');
-    charts.forEach((chart, i) => {
-      const bars = chart.querySelectorAll('.bar');
-      bars.forEach((bar, idx)=>{ bar.style.height = lista[i].tendencia[idx]+"px"; });
-    });
-  }, 100);
-}
-
-function verDetalhe(jogo){ alert("Análise detalhada de "+jogo+" (simulada via IA premium)."); }
-function mostrarInicio(){gerarCards(jogosIA.inicio);}
-function mostrarBrasileirao(){gerarCards(jogosIA.brasileirao);}
-function mostrarLaLiga(){gerarCards(jogosIA.laliga);}
-function mostrarPremier(){gerarCards(jogosIA.premier);}
-function mostrarAFC(){gerarCards(jogosIA.afc);}
-function mostrarFavoritos(){alert("Funcionalidade de favoritos ainda não implementada.");}
-setInterval(()=>{ gerarCards(jogosIA.inicio); console.log("Palpites atualizados"); },30000);
-mostrarInicio();
-
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('service-worker.js')
-    .then(() => console.log('Service Worker ativo'))
-    .catch(err => console.log('Erro no SW', err));
+  navigator.serviceWorker.register('sw.js');
 }
 </script>
+
 </body>
 </html>
